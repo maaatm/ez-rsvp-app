@@ -1,0 +1,20 @@
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcscmblueprint
+xcuserdata/
+*.moved-aside
+
+# XcodeGen output (regenerate with `xcodegen generate`)
+EZRsvp.xcodeproj/
+
+# SPM
+.build/
+.swiftpm/
+
+# Firebase (never commit secrets)
+GoogleService-Info.plist
+
+# macOS
+.DS_Store
