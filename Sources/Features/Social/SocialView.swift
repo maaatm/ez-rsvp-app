@@ -40,7 +40,7 @@ struct SocialView: View {
                               subtitle: "\(session.friends.count) saying yes to mysteries")
                 Button { showAddFriend = true } label: {
                     Image(systemName: "person.badge.plus")
-                        .font(.headline).foregroundStyle(Theme.brandGradient)
+                        .font(.headline).foregroundStyle(Theme.brandSolid)
                 }
             }
             ScrollView(.horizontal, showsIndicators: false) {
@@ -135,7 +135,7 @@ private struct CrewRow: View {
         VStack(spacing: 14) {
             HStack(spacing: 14) {
                 Image(systemName: crew.symbol)
-                    .font(.title2).foregroundStyle(Theme.brandGradient)
+                    .font(.title2).foregroundStyle(Theme.brandSolid)
                     .frame(width: 52, height: 52).glass(cornerRadius: Theme.Radius.sm)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(crew.name).font(.headline).foregroundStyle(Theme.ink)

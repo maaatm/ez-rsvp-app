@@ -36,9 +36,9 @@ final class SessionStore {
     init(backend: BackendService? = nil) {
         if let backend {
             self.backend = backend
-        } else if AppConfig.useFirebase {
-            #if canImport(FirebaseFirestore)
-            self.backend = FirebaseBackend()
+        } else if AppConfig.useSupabase {
+            #if canImport(Supabase)
+            self.backend = SupabaseBackend()
             #else
             self.backend = MockBackend()
             #endif
@@ -181,7 +181,13 @@ final class SessionStore {
         let url = dir.appendingPathComponent("avatar-\(user.id)-\(Int(Date().timeIntervalSince1970)).jpg")
         do {
             try data.write(to: url, options: .atomic)
-            if let old = user.photoURL, old.isFileURL { try? FileManager.default.removeItem(at: old) }
+            // Clean up the previous avatar. Resolve it by filename against the
+            // current Documents dir, since a stored absolute path may be stale
+            // after a container change.
+            if let old = user.photoURL, old.isFileURL {
+                let oldResolved = dir.appendingPathComponent(old.lastPathComponent)
+                try? FileManager.default.removeItem(at: oldResolved)
+            }
             user.photoURL = url
             persist(user)
         } catch {
@@ -208,6 +214,35 @@ final class SessionStore {
 
     func group(id: String) -> RSVPGroup? { groups.first { $0.id == id } }
 
+    // MARK: Reveals
+
+    /// Events whose mystery has been opened this session — even if their real
+    /// `revealTime` is still in the future (e.g. the demo trigger). Keeps a
+    /// reveal permanent as the user navigates away and back.
+    var revealedEventIDs: Set<String> = []
+
+    /// True once the mystery is open — by the clock, or because it was revealed
+    /// manually. Prefer this over `MysteryEvent.isRevealed()` in the UI.
+    func isRevealed(_ event: MysteryEvent) -> Bool {
+        event.isRevealed() || revealedEventIDs.contains(event.id)
+    }
+
+    /// Marks an event permanently revealed for the rest of the session.
+    func reveal(_ eventID: String) {
+        revealedEventIDs.insert(eventID)
+    }
+
+    // MARK: Payments
+
+    /// Events the current user has paid their ticket for. A crew can assign an
+    /// event for free; each member then pays their own ticket from the reveal
+    /// room. Solo plans are paid up front. In-memory, like reveals.
+    var paidEventIDs: Set<String> = []
+
+    func hasPaid(_ eventID: String) -> Bool { paidEventIDs.contains(eventID) }
+
+    func markPaid(_ eventID: String) { paidEventIDs.insert(eventID) }
+
     // MARK: Quests
 
     func quest(forEvent eventID: String) -> Quest? { quests.first { $0.eventID == eventID } }
@@ -232,6 +267,15 @@ final class SessionStore {
     }
 
     var headlineEvent: MysteryEvent? { headlineQuest.flatMap { event(id: $0.eventID) } }
+
+    /// Every event the user has said yes to (started a quest on), soonest
+    /// reveal first. The first element is the `headlineEvent`; the rest fill the
+    /// "other RSVPs" list on Home.
+    var signedUpEvents: [MysteryEvent] {
+        quests
+            .compactMap { event(id: $0.eventID) }
+            .sorted { $0.revealTime < $1.revealTime }
+    }
 
     var recommendations: [ScoredEvent] {
         guard let user = currentUser else { return [] }
@@ -379,6 +423,17 @@ final class SessionStore {
     }
 
     // MARK: Other people's profiles
+
+    /// A given user's friends. For the current user this is the live, mutable
+    /// friends list (so anyone they just added appears right away); for everyone
+    /// else it's resolved from the demo friend graph.
+    func friends(forUser userID: String) -> [AppUser] {
+        if userID == currentUser?.id { return friends }
+        let all = SampleData.users()
+        return SampleData.friendIDs(forUser: userID).compactMap { id in
+            all.first { $0.id == id }
+        }
+    }
 
     /// Crews a given user belongs to (that the current user can see).
     func crews(forUser userID: String) -> [RSVPGroup] {

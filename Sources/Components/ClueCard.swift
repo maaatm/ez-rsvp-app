@@ -8,7 +8,7 @@ struct ClueCard: View {
         HStack(spacing: 12) {
             Image(systemName: isUnlocked ? clue.symbol : "lock.fill")
                 .font(.subheadline)
-                .foregroundStyle(isUnlocked ? AnyShapeStyle(Theme.brandGradient) : AnyShapeStyle(Color.secondary))
+                .foregroundStyle(isUnlocked ? AnyShapeStyle(Theme.brandSolid) : AnyShapeStyle(Color.secondary))
                 .frame(width: 24)
 
             Text(isUnlocked ? clue.text : "Locked clue — unlocks soon")

@@ -1,8 +1,8 @@
 import SwiftUI
 
 /// Guardrail preferences before starting a mystery RSVP. The user sets
-/// constraints (price ceiling, distance, energy, dealbreakers) — never the
-/// event itself — so the surprise survives while the match quality rises.
+/// constraints (price ceiling, distance, energy) — never the event itself — so
+/// the surprise survives while the match quality rises.
 struct QuestPreferencesSheet: View {
     @Environment(SessionStore.self) private var session
     @Environment(\.dismiss) private var dismiss
@@ -55,19 +55,6 @@ struct QuestPreferencesSheet: View {
                                 Text("Chill").font(.caption).foregroundStyle(.secondary)
                                 Spacer()
                                 Text("Adventurous").font(.caption).foregroundStyle(.secondary)
-                            }
-                        }
-                    }
-
-                    // Dealbreakers
-                    section("Dealbreakers (what you'd hate)") {
-                        FlowLayout(spacing: 8) {
-                            ForEach(Dealbreaker.allCases) { db in
-                                InterestChip(title: db.rawValue, symbol: db.symbol,
-                                             isSelected: prefs.dealbreakers.contains(db)) {
-                                    if prefs.dealbreakers.contains(db) { prefs.dealbreakers.remove(db) }
-                                    else { prefs.dealbreakers.insert(db) }
-                                }
                             }
                         }
                     }

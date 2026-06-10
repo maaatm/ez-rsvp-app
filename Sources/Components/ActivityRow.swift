@@ -31,7 +31,7 @@ struct ActivityRow: View {
                     Circle().fill(Theme.violet.opacity(0.12)).frame(width: 36, height: 36)
                     Image(systemName: item.isReveal ? "party.popper.fill" : "questionmark")
                         .font(.subheadline.weight(.bold))
-                        .foregroundStyle(Theme.brandGradient)
+                        .foregroundStyle(Theme.brandSolid)
                 }
                 Text(item.timeAgo).font(.caption2).foregroundStyle(.tertiary)
             }

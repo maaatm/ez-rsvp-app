@@ -5,7 +5,7 @@ enum AuthProvider {
 }
 
 /// Abstraction over the data/auth layer. `MockBackend` powers demo mode;
-/// `FirebaseBackend` is a drop-in for production. Inject either through
+/// `SupabaseBackend` is a drop-in for production. Inject either through
 /// `SessionStore` — nothing else in the app knows which is live.
 protocol BackendService: Sendable {
     // Auth

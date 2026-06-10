@@ -62,7 +62,7 @@ Sources/
 ├── App/            EZRsvpApp (entry), RootView (router)
 ├── Models/         AppUser, MysteryEvent, RSVPGroup, RSVP, Enums
 ├── Services/       BackendService protocol ─┬─ MockBackend (demo)
-│                                            └─ FirebaseBackend (prod, gated)
+│                                            └─ SupabaseBackend (prod, gated)
 │                   SessionStore (state + DI), RecommendationEngine,
 │                   NotificationService, LocationService, EventCache, SampleData
 ├── Components/     Reusable UI (glass, gradient bg, mystery box, cards…)
@@ -73,44 +73,45 @@ Sources/
 ```
 
 The whole app talks to a single `BackendService` **protocol**. Demo mode injects
-`MockBackend` (an `actor`); production injects `FirebaseBackend`. Nothing else in
+`MockBackend` (an `actor`); production injects `SupabaseBackend`. Nothing else in
 the app knows which is live — swap by flipping one flag.
 
 ---
 
-## 🔥 Enabling Firebase (Auth + Firestore + Storage)
+## ⚡️ Enabling Supabase (Auth + Postgres + Storage)
 
 The app is intentionally **zero-dependency** by default so it always builds.
 To go live:
 
-1. In `project.yml`, **uncomment** the `packages:` and `dependencies:` Firebase
+1. In `project.yml`, **uncomment** the `packages:` and `dependencies:` Supabase
    blocks.
-2. `xcodegen generate` (resolves the Firebase SPM packages).
-3. Create a Firebase project, add an iOS app with bundle id
-   `app.ezrsvp.EZRsvp`, and drop **`GoogleService-Info.plist`** into `Resources/`.
-4. In **Firebase Console → Authentication**, enable **Apple**, **Google**, and
-   **Email** providers.
-5. Run `firestore-schema.md`'s collections + security rules.
-6. Set `AppConfig.useFirebase = true`.
+2. `xcodegen generate` (resolves the `supabase-swift` SPM package).
+3. Create a Supabase project, then copy its **Project URL** and **anon key**
+   (Project Settings → API) into `AppConfig.supabaseURL` / `supabaseAnonKey`.
+4. In **Supabase → Authentication → Providers**, enable **Apple**, **Google**,
+   and **Email**.
+5. Run `supabase-schema.md`'s tables + row-level-security policies.
+6. Set `AppConfig.useSupabase = true`.
 
-`FirebaseBackend.swift` already implements the data/auth methods (gated behind
-`#if canImport(FirebaseFirestore)`), and `EZRsvpApp` calls `FirebaseApp.configure()`
-automatically when the flag is on.
+`SupabaseBackend.swift` already implements the data/auth methods (gated behind
+`#if canImport(Supabase)`); the `SupabaseClient` initializes lazily from
+`AppConfig`, so there's no global configure step.
 
 ### Sign in with Apple (production)
 Real Sign in with Apple is implemented (`AppleSignIn.swift` + the production branch
 in `AuthView`): it generates a secure nonce, sends its SHA256 to Apple, and exchanges
-the returned identity token for a Firebase credential. To activate it:
+the returned identity token via Supabase's `signInWithIdToken`. To activate it:
 1. In Xcode → target → **Signing & Capabilities → + Capability → Sign in with Apple**.
-2. Enable Apple as a provider in the Firebase console.
+2. Enable Apple as a provider in **Supabase → Authentication → Providers** (add your
+   Services ID + key).
 
 (In demo mode the Apple button signs you in locally so it works without an entitlement.)
 
 ### Account deletion
 The App-Store-required **Delete account** flow lives in **Profile** (with a
 confirmation dialog). `SessionStore.deleteAccount()` calls
-`FirebaseBackend.deleteAccount` (removes the Firestore profile doc + the Auth user)
-and resets the app to a clean first-run state.
+`SupabaseBackend.deleteAccount` (removes the `profiles` row, then deletes the auth
+user via a `delete_account` Postgres RPC) and resets the app to a clean first-run state.
 
 ---
 

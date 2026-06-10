@@ -25,9 +25,9 @@ struct AuthView: View {
                 }
 
                 VStack(spacing: 12) {
-                    if AppConfig.useFirebase {
+                    if AppConfig.useSupabase {
                         // Production: native Sign in with Apple → ASAuthorization →
-                        // Firebase credential (with a secure nonce).
+                        // Supabase identity-token sign-in (with a secure nonce).
                         SignInWithAppleButton(.signIn) { request in
                             let nonce = AppleSignIn.newNonce()
                             currentNonce = nonce
@@ -92,7 +92,7 @@ struct AuthView: View {
                 .padding(Theme.Space.lg)
                 .glass(cornerRadius: Theme.Radius.lg, strong: true)
 
-                if AppConfig.useFirebase == false {
+                if AppConfig.useSupabase == false {
                     Label("Demo mode — any sign-in drops you into a live account.",
                           systemImage: "sparkles")
                         .font(.caption).foregroundStyle(.secondary)

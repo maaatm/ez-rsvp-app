@@ -3,7 +3,7 @@ import CryptoKit
 import Security
 
 /// Helpers for real Sign in with Apple. A random nonce is generated per request,
-/// its SHA256 is sent to Apple, and the raw nonce is later handed to Firebase
+/// its SHA256 is sent to Apple, and the raw nonce is later handed to Supabase
 /// alongside the identity token to prevent replay attacks.
 enum AppleSignIn {
     static func newNonce(length: Int = 32) -> String {

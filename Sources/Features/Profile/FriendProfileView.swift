@@ -49,11 +49,21 @@ struct FriendProfileView: View {
             Label(user.city, systemImage: "mappin.and.ellipse")
                 .font(.subheadline).foregroundStyle(.secondary)
 
+            // Friends are part of what a private profile hides — only show the
+            // list to people who can actually view this profile (you, friends,
+            // or anyone if it's public).
+            if canView {
+                friendsPill
+            }
+
             if user.isPrivateProfile {
                 Badge(text: "Private profile", systemImage: "lock.fill", tint: .secondary)
             }
 
-            if !isSelf {
+            // For a private non-friend the locked card below carries its own
+            // "Add friend" button, so only show the header friend action when
+            // the profile is actually viewable — otherwise it'd appear twice.
+            if !isSelf && canView {
                 if session.isFriend(user) {
                     Label("Friends", systemImage: "checkmark.circle.fill")
                         .font(.subheadline.weight(.semibold))
@@ -75,6 +85,24 @@ struct FriendProfileView: View {
         .padding(Theme.Space.lg)
         .glass(cornerRadius: Theme.Radius.lg, strong: true)
         .gradientBorder(cornerRadius: Theme.Radius.lg)
+    }
+
+    /// Tappable "X friends" stat that pushes this person's friends list — so you
+    /// can browse who they know.
+    private var friendsPill: some View {
+        let friends = session.friends(forUser: user.id)
+        return NavigationLink {
+            FriendsListView(ownerName: user.firstName, friends: friends)
+        } label: {
+            Label("\(friends.count) \(friends.count == 1 ? "friend" : "friends")",
+                  systemImage: "person.2.fill")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Theme.ink)
+                .padding(.horizontal, 16).padding(.vertical, 9)
+                .glass(cornerRadius: Theme.Radius.pill)
+        }
+        .buttonStyle(.plain)
+        .padding(.top, 2)
     }
 
     private var upcomingSection: some View {
@@ -120,7 +148,7 @@ struct FriendProfileView: View {
                     } label: {
                         HStack(spacing: 14) {
                             Image(systemName: crew.symbol)
-                                .font(.title3).foregroundStyle(Theme.brandGradient)
+                                .font(.title3).foregroundStyle(Theme.brandSolid)
                                 .frame(width: 44, height: 44).glass(cornerRadius: Theme.Radius.sm)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(crew.name).font(.subheadline.weight(.semibold)).foregroundStyle(Theme.ink)
@@ -140,7 +168,7 @@ struct FriendProfileView: View {
 
     private var lockedCard: some View {
         VStack(spacing: 12) {
-            Image(systemName: "lock.fill").font(.largeTitle).foregroundStyle(Theme.brandGradient)
+            Image(systemName: "lock.fill").font(.largeTitle).foregroundStyle(Theme.brandSolid)
             Text("\(user.firstName)'s profile is private").font(.headline)
             Text("Add them as a friend to see their mysteries and crews.")
                 .font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.center)

@@ -10,6 +10,10 @@ enum Theme {
     static let cyan = Color(red: 0.569, green: 0.769, blue: 0.949)   // #91C4F2 sky blue
     static let peach = Color(red: 0.988, green: 0.843, blue: 0.678)  // #FCD7AD warm accent
 
+    /// Solid brand accent — replaces `brandGradient` on icons and the default
+    /// avatar so glyphs render in one flat color instead of a gradient.
+    static let brandSolid = violet
+
     // Ink (text)
     static let ink = Color(red: 0.153, green: 0.161, blue: 0.196)        // #272932 primary text
     static let inkSecondary = Color(red: 0.420, green: 0.447, blue: 0.502) // muted slate

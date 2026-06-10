@@ -23,6 +23,29 @@ struct BlurredMapView: View {
     }
 
     var body: some View {
+        // Gate the Metal-backed Map on a measured, non-zero size. Inside a
+        // ScrollView the map otherwise gets built during transient 0-height
+        // layout passes, which makes MapKit allocate invalid drawables — the
+        // "CAMetalLayer ignoring invalid setDrawableSize 0×0" / "1206x0 image
+        // slot" churn. Until the container has a real size we show a cheap,
+        // non-Metal placeholder (imperceptible: it only spans one layout pass).
+        GeometryReader { proxy in
+            if proxy.size.width > 1, proxy.size.height > 1 {
+                mapContent
+                    .frame(width: proxy.size.width, height: proxy.size.height)
+            } else {
+                Theme.surfaceSunken
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md, style: .continuous))
+        .onChange(of: zoomIn) { _, newValue in
+            guard newValue else { return }
+            focusIn()
+        }
+        .onAppear { if zoomIn { focusIn() } }
+    }
+
+    private var mapContent: some View {
         Map(position: $position, interactionModes: zoomIn ? .all : []) {
             if pinDropped {
                 Annotation(event.venueName, coordinate: event.coordinate) {
@@ -43,12 +66,6 @@ struct BlurredMapView: View {
                 }
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md, style: .continuous))
-        .onChange(of: zoomIn) { _, newValue in
-            guard newValue else { return }
-            focusIn()
-        }
-        .onAppear { if zoomIn { focusIn() } }
     }
 
     private var venuePin: some View {

@@ -55,6 +55,12 @@ struct MysteryEvent: Identifiable, Codable, Hashable {
         return max(0, Int(ceil(secs / 86_400)))
     }
 
+    /// Whole days remaining until the event itself begins (floored at 0).
+    func daysUntilEvent(now: Date = .now) -> Int {
+        let secs = eventTime.timeIntervalSince(now)
+        return max(0, Int(ceil(secs / 86_400)))
+    }
+
     /// A clue is unlocked once we're within its `unlocksDaysBefore` window.
     func isClueUnlocked(_ clue: Clue, now: Date = .now) -> Bool {
         daysUntilReveal(now: now) <= clue.unlocksDaysBefore || isRevealed(now: now)

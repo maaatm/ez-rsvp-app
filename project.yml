@@ -33,22 +33,16 @@ targets:
         SWIFT_EMIT_LOC_STRINGS: YES
         ENABLE_PREVIEWS: YES
     # ───────────────────────────────────────────────────────────────────
-    # OPTIONAL: Firebase. The app builds & runs WITHOUT these (demo mode).
-    # To enable the live backend, uncomment the dependencies below, run
-    # `xcodegen generate`, add GoogleService-Info.plist, and set
-    # AppConfig.useFirebase = true. See README.md.
+    # OPTIONAL: Supabase. The app builds & runs WITHOUT this (demo mode).
+    # To enable the live backend, uncomment the dependency below, run
+    # `xcodegen generate`, fill in AppConfig.supabaseURL / supabaseAnonKey,
+    # and set AppConfig.useSupabase = true. See README.md.
     # ───────────────────────────────────────────────────────────────────
     # dependencies:
-    #   - package: Firebase
-    #     product: FirebaseCore
-    #   - package: Firebase
-    #     product: FirebaseAuth
-    #   - package: Firebase
-    #     product: FirebaseFirestore
-    #   - package: Firebase
-    #     product: FirebaseStorage
+    #   - package: Supabase
+    #     product: Supabase
 
 # packages:
-#   Firebase:
-#     url: https://github.com/firebase/firebase-ios-sdk
-#     from: "11.0.0"
+#   Supabase:
+#     url: https://github.com/supabase/supabase-swift
+#     from: "2.0.0"

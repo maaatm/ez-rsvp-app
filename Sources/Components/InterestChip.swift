@@ -48,7 +48,7 @@ struct InterestTile: View {
             VStack(spacing: 10) {
                 Image(systemName: interest.symbol)
                     .font(.title2)
-                    .foregroundStyle(isSelected ? AnyShapeStyle(Theme.brandGradient) : AnyShapeStyle(Color.secondary))
+                    .foregroundStyle(isSelected ? AnyShapeStyle(Theme.brandSolid) : AnyShapeStyle(Color.secondary))
                 Text(interest.rawValue)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Theme.ink)

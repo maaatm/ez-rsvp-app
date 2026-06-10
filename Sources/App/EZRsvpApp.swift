@@ -1,8 +1,5 @@
 import SwiftUI
 import TipKit
-#if canImport(FirebaseCore)
-import FirebaseCore
-#endif
 
 @main
 struct EZRsvpApp: App {
@@ -10,10 +7,8 @@ struct EZRsvpApp: App {
     @State private var location = LocationService()
 
     init() {
-        // Enable in production once Firebase is added (see README).
-        #if canImport(FirebaseCore)
-        if AppConfig.useFirebase { FirebaseApp.configure() }
-        #endif
+        // The Supabase client initializes lazily inside SupabaseBackend from
+        // AppConfig, so there's no global configure() to call here. See README.
 
         try? Tips.configure([
             .displayFrequency(.immediate),

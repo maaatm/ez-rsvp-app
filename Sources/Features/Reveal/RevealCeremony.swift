@@ -75,7 +75,7 @@ struct RevealCeremony: View {
                 VStack(spacing: 18) {
                     Image(systemName: "questionmark")
                         .font(.system(size: 80, weight: .black, design: .rounded))
-                        .foregroundStyle(Theme.brandGradient)
+                        .foregroundStyle(Theme.brandSolid)
                         .scaleEffect(stage == .charge ? 1.15 : 1)
                         .animation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true), value: stage)
                     Text(stageCaption)
@@ -91,7 +91,7 @@ struct RevealCeremony: View {
                 VStack(spacing: 14) {
                     Image(systemName: event.imageSymbol)
                         .font(.system(size: 64))
-                        .foregroundStyle(Theme.brandGradient)
+                        .foregroundStyle(Theme.brandSolid)
                     Text("YOU SAID YES TO").font(.caption2.weight(.bold)).tracking(2).foregroundStyle(Theme.violet)
                     Text(event.title)
                         .font(.system(.title, design: .rounded).weight(.heavy))

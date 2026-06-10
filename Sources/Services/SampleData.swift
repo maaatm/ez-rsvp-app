@@ -137,6 +137,133 @@ enum SampleData {
                 ],
                 weather: Weather(temp: 60, condition: "Clear", symbol: "moon.fill"),
                 imageSymbol: "gamecontroller.fill"
+            ),
+            MysteryEvent(
+                id: "e7",
+                title: "Silent Forest Bathing + Sauna",
+                eventDescription: "A guided morning of slow walking, deep breathing, and a wood-fired sauna deep in the trees. Phones stay in the basket. You leave lighter than you came.",
+                category: .wellnessEscape,
+                difficulty: .beginner,
+                price: .premium,
+                venueName: "Watchung Reservation Grove",
+                generalArea: "Union County, NJ",
+                latitude: 40.6895, longitude: -74.3779,
+                eventTime: now.addingTimeInterval(3 * day + 9 * hour),
+                revealTime: now.addingTimeInterval(3 * day),
+                distanceMiles: 16,
+                interests: [.outdoor],
+                clues: [
+                    Clue(text: "Leave the phone behind", symbol: "leaf.fill", unlocksDaysBefore: 5),
+                    Clue(text: "Dress in warm layers", symbol: "tshirt.fill", unlocksDaysBefore: 2)
+                ],
+                weather: Weather(temp: 55, condition: "Misty morning", symbol: "cloud.fog.fill"),
+                imageSymbol: "leaf.fill"
+            ),
+            MysteryEvent(
+                id: "e8",
+                title: "Underground Comedy Cellar",
+                eventDescription: "A no-name basement, a single mic, and a lineup you won't know until they're on stage. Some are touring headliners testing new material. All of it is off the record.",
+                category: .liveEntertainment,
+                difficulty: .beginner,
+                price: .budget,
+                venueName: "An Unmarked Basement Door",
+                generalArea: "Hoboken, NJ",
+                latitude: 40.7439, longitude: -74.0324,
+                eventTime: now.addingTimeInterval(4 * day + 20 * hour),
+                revealTime: now.addingTimeInterval(4 * day),
+                distanceMiles: 20,
+                interests: [.comedy, .nightlife],
+                clues: [
+                    Clue(text: "Bring your laugh", symbol: "theatermasks.fill", unlocksDaysBefore: 5),
+                    Clue(text: "Two-drink minimum", symbol: "wineglass.fill", unlocksDaysBefore: 1)
+                ],
+                weather: Weather(temp: 59, condition: "Clear", symbol: "moon.fill"),
+                imageSymbol: "theatermasks.fill"
+            ),
+            MysteryEvent(
+                id: "e9",
+                title: "Blindfolded Tasting Dinner",
+                eventDescription: "Seven courses, no menu, and a blindfold for the first three. A chef's table experience built entirely around what you taste, not what you see.",
+                category: .foodAdventure,
+                difficulty: .medium,
+                price: .premium,
+                venueName: "An Undisclosed Chef's Table",
+                generalArea: "Princeton, NJ",
+                latitude: 40.3573, longitude: -74.6672,
+                eventTime: now.addingTimeInterval(6 * day + 19 * hour),
+                revealTime: now.addingTimeInterval(6 * day),
+                distanceMiles: 18,
+                interests: [.food],
+                clues: [
+                    Clue(text: "Trust your tastebuds", symbol: "fork.knife", unlocksDaysBefore: 5),
+                    Clue(text: "Come with an open palate", symbol: "eye.slash.fill", unlocksDaysBefore: 2),
+                    Clue(text: "Seven courses await", symbol: "list.number", unlocksDaysBefore: 1)
+                ],
+                weather: Weather(temp: 57, condition: "Cool", symbol: "cloud.fill"),
+                imageSymbol: "fork.knife.circle.fill"
+            ),
+            MysteryEvent(
+                id: "e10",
+                title: "Mystery Trivia & Craft Beer",
+                eventDescription: "A roving trivia night at a taproom that won't be named until the day. Categories are a secret, the beer is local, and the winning team drinks free.",
+                category: .socialMixer,
+                difficulty: .beginner,
+                price: .moderate,
+                venueName: "A Local Taproom",
+                generalArea: "New Brunswick, NJ",
+                latitude: 40.4860, longitude: -74.4510,
+                eventTime: now.addingTimeInterval(8 * day + 19 * hour),
+                revealTime: now.addingTimeInterval(8 * day),
+                distanceMiles: 3,
+                interests: [.food, .networking, .nightlife],
+                clues: [
+                    Clue(text: "Bring a teammate", symbol: "person.2.fill", unlocksDaysBefore: 5),
+                    Clue(text: "Know a little of everything", symbol: "brain.head.profile", unlocksDaysBefore: 2)
+                ],
+                weather: Weather(temp: 62, condition: "Mild", symbol: "moon.fill"),
+                imageSymbol: "questionmark.bubble.fill"
+            ),
+            MysteryEvent(
+                id: "e11",
+                title: "Kayak Sunset Paddle",
+                eventDescription: "A small-group launch onto calm water just as the sun drops. Glide past the skyline, raft up midstream for a toast, and paddle back under the first stars.",
+                category: .outdoorChallenge,
+                difficulty: .medium,
+                price: .moderate,
+                venueName: "A Quiet Riverbend",
+                generalArea: "Raritan River, NJ",
+                latitude: 40.5276, longitude: -74.5890,
+                eventTime: now.addingTimeInterval(10 * day + 7 * hour),
+                revealTime: now.addingTimeInterval(10 * day),
+                distanceMiles: 14,
+                interests: [.outdoor, .sports],
+                clues: [
+                    Clue(text: "You'll get a little wet", symbol: "drop.fill", unlocksDaysBefore: 5),
+                    Clue(text: "Golden-hour launch", symbol: "sunset.fill", unlocksDaysBefore: 2)
+                ],
+                weather: Weather(temp: 68, condition: "Calm waters", symbol: "sun.max.fill"),
+                imageSymbol: "sailboat.fill"
+            ),
+            MysteryEvent(
+                id: "e12",
+                title: "Pottery Wheel & Wine",
+                eventDescription: "A hands-on evening at a hidden ceramics loft. Throw your first bowl, get gloriously messy, and sip a glass while the wheel spins. Your piece ships to you once it's fired.",
+                category: .creativeMystery,
+                difficulty: .beginner,
+                price: .moderate,
+                venueName: "A Hidden Ceramics Loft",
+                generalArea: "Montclair, NJ",
+                latitude: 40.8259, longitude: -74.2090,
+                eventTime: now.addingTimeInterval(12 * day + 19 * hour),
+                revealTime: now.addingTimeInterval(12 * day),
+                distanceMiles: 24,
+                interests: [.arts],
+                clues: [
+                    Clue(text: "Hands will get messy", symbol: "hands.sparkles.fill", unlocksDaysBefore: 5),
+                    Clue(text: "A glass is on us", symbol: "wineglass.fill", unlocksDaysBefore: 2)
+                ],
+                weather: Weather(temp: 60, condition: "Cozy indoors", symbol: "cloud.fill"),
+                imageSymbol: "paintbrush.fill"
             )
         ]
     }
@@ -205,6 +332,22 @@ enum SampleData {
     static func friends() -> [AppUser] {
         let u = users()
         return [u[1], u[2], u[3]] // Sarah, Jason, Emily
+    }
+
+    /// A small demo friend graph (userID → friend userIDs) so every profile can
+    /// show who *they* are friends with, not just the current user. The current
+    /// user's own friends come from the live `SessionStore.friends` list instead,
+    /// so anyone they add shows up immediately.
+    static func friendIDs(forUser userID: String) -> [String] {
+        let graph: [String: [String]] = [
+            "u1": ["u2", "u3", "u4"],       // You — fallback; live list used at runtime
+            "u2": ["u1", "u3", "u4", "u5"], // Sarah
+            "u3": ["u1", "u2", "u5", "u6"], // Jason
+            "u4": ["u1", "u2", "u6"],       // Emily
+            "u5": ["u2", "u3", "u6"],       // Leo
+            "u6": ["u3", "u4", "u5"]        // Sam
+        ]
+        return graph[userID] ?? []
     }
 
     /// Started RSVPs for the current user — one per crew so every crew (and the

@@ -37,7 +37,7 @@ struct GroupDetailView: View {
     private func header(_ group: RSVPGroup) -> some View {
         VStack(spacing: 12) {
             Image(systemName: group.symbol)
-                .font(.system(size: 36)).foregroundStyle(Theme.brandGradient)
+                .font(.system(size: 36)).foregroundStyle(Theme.brandSolid)
                 .frame(width: 72, height: 72).glass(cornerRadius: Theme.Radius.md)
             Text(group.name).font(.title2.weight(.bold))
             Text("\(group.members.count) members · \(group.goingCount) going")
@@ -52,21 +52,40 @@ struct GroupDetailView: View {
     @ViewBuilder
     private func questSection(_ group: RSVPGroup) -> some View {
         if let quest = activeQuest, let event = session.event(id: quest.eventID) {
+            let revealed = session.isRevealed(event)
             VStack(spacing: 14) {
-                Badge(text: "Your crew's mystery", systemImage: "sparkles", tint: Theme.violet)
+                Badge(text: revealed ? "Your crew's plan" : "Your crew's mystery",
+                      systemImage: revealed ? "checkmark.seal.fill" : "sparkles",
+                      tint: revealed ? Theme.cyan : Theme.violet)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 HStack(spacing: 14) {
-                    MysteryBox(size: 56, glow: false)
+                    if revealed {
+                        Image(systemName: event.imageSymbol)
+                            .font(.title).foregroundStyle(Theme.brandSolid)
+                            .frame(width: 56, height: 56)
+                            .glass(cornerRadius: Theme.Radius.sm)
+                    } else {
+                        MysteryBox(size: 56, glow: false)
+                    }
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Reveals in").font(.caption).foregroundStyle(.secondary)
-                        CountdownView(target: event.revealTime, compact: true)
+                        if revealed {
+                            Text(event.title).font(.subheadline.weight(.bold))
+                                .foregroundStyle(Theme.ink).lineLimit(1)
+                        }
+                        Text(revealed ? "Starts in" : "Reveals in")
+                            .font(.caption).foregroundStyle(.secondary)
+                        CountdownView(target: revealed ? event.eventTime : event.revealTime, compact: true)
                     }
                     Spacer()
+                }
+                if !session.hasPaid(event.id) {
+                    PaymentDueBanner(event: event)
                 }
                 NavigationLink {
                     RevealView(eventID: event.id)
                 } label: {
-                    Label("Open the reveal room", systemImage: "eye.fill")
+                    Label(revealed ? "Directions & full details" : "Open the reveal room",
+                          systemImage: revealed ? "arrow.up.right" : "eye.fill")
                 }
                 .buttonStyle(.primary)
             }
@@ -84,6 +103,10 @@ struct GroupDetailView: View {
                     Label("Start a mystery RSVP", systemImage: "sparkles")
                 }
                 .buttonStyle(.primary)
+
+                Text("Or browse Discover, open a mystery, and add it to this crew.")
+                    .font(.caption).foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
             }
             .frame(maxWidth: .infinity)
             .padding(Theme.Space.lg)
@@ -94,7 +117,7 @@ struct GroupDetailView: View {
     private func invite(_ group: RSVPGroup) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             HStack(spacing: 10) {
-                Image(systemName: "ticket.fill").foregroundStyle(Theme.brandGradient)
+                Image(systemName: "ticket.fill").foregroundStyle(Theme.brandSolid)
                 VStack(alignment: .leading, spacing: 1) {
                     Text("Invite friends").font(.subheadline.weight(.semibold))
                     Text("Code \(group.inviteCode)")
