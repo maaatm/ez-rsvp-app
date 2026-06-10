@@ -5,9 +5,14 @@ import SwiftUI
 /// Styled to match the web app's `RSVPCard` in its locked state: a shadow-grey
 /// rounded card with a soft pastel glow underneath and white glyphs, instead of
 /// the previous glass/gradient-border treatment.
+///
+/// Set `animated: false` to render it still (no float or pulse) — used where it
+/// appears inline as a thumbnail, like profile and group rows, rather than as the
+/// anticipation-building hero on Home and the reveal room.
 struct MysteryBox: View {
     var size: CGFloat = 180
     var glow: Bool = true
+    var animated: Bool = true
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var floatUp = false
@@ -53,7 +58,7 @@ struct MysteryBox: View {
         .offset(y: floatUp ? -10 : 0)
         .accessibilityLabel("Mystery event, not yet revealed")
         .onAppear {
-            guard !reduceMotion else { return }
+            guard animated, !reduceMotion else { return }
             withAnimation(.easeInOut(duration: 3.5).repeatForever(autoreverses: true)) { floatUp = true }
             withAnimation(.easeInOut(duration: 2.2).repeatForever(autoreverses: true)) { pulse = true }
         }

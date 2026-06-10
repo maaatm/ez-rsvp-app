@@ -1,26 +1,31 @@
 import SwiftUI
 
-/// Ambient app background: near-black base, drifting brand-colored aurora blobs,
-/// and floating ticket / pin glyphs. Respects Reduce Motion.
+/// Ambient app background: near-black base, soft brand-colored aurora glows, and
+/// faint floating ticket / pin glyphs.
+///
+/// Deliberately **static**. This view sits behind the entire app (`RootView`),
+/// so anything animated here runs forever on every screen and keeps the GPU from
+/// ever idling — which was the app's main energy drain. Two changes keep it cheap:
+///
+/// 1. The aurora is drawn with `RadialGradient`s instead of blurred circles. A
+///    gradient from a tinted color out to clear gives the same soft glow as the
+///    old `Circle().blur(radius: 120)` but as a single shader fill, with none of
+///    the per-frame multi-tap Gaussian blur cost.
+/// 2. Nothing animates, and the whole thing is flattened with `.drawingGroup()`,
+///    so the compositor rasterizes it once and reuses that bitmap at rest.
 struct GradientBackground: View {
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var animate = false
-
     private let glyphs = ["ticket.fill", "mappin.circle.fill", "sparkles", "ticket", "mappin"]
 
     var body: some View {
         ZStack {
-            Theme.background.ignoresSafeArea()
+            Theme.background
 
-            // Aurora blobs
-            blob(Theme.violet, size: 460)
-                .offset(x: animate ? -120 : -150, y: animate ? -260 : -300)
-            blob(Theme.fuchsia, size: 420)
-                .offset(x: animate ? 160 : 180, y: animate ? -120 : -80)
-            blob(Theme.cyan, size: 440)
-                .offset(x: animate ? -80 : -40, y: animate ? 320 : 360)
+            // Aurora glows — radial gradients stand in for the old blurred blobs.
+            aurora(Theme.violet, size: 700).offset(x: -135, y: -280)
+            aurora(Theme.fuchsia, size: 640).offset(x: 170, y: -100)
+            aurora(Theme.cyan, size: 680).offset(x: -60, y: 340)
 
-            // Floating glyphs
+            // Faint floating glyphs — purely decorative texture, now static.
             GeometryReader { geo in
                 ForEach(0..<10, id: \.self) { i in
                     Image(systemName: glyphs[i % glyphs.count])
@@ -28,34 +33,28 @@ struct GradientBackground: View {
                         .foregroundStyle(Theme.ink.opacity(0.035))
                         .position(
                             x: geo.size.width * positions[i].x,
-                            y: geo.size.height * positions[i].y + (animate ? -16 : 16)
-                        )
-                        .animation(
-                            reduceMotion ? nil :
-                                .easeInOut(duration: Double(5 + i % 4))
-                                .repeatForever(autoreverses: true)
-                                .delay(Double(i) * 0.3),
-                            value: animate
+                            y: geo.size.height * positions[i].y
                         )
                 }
             }
         }
         .ignoresSafeArea()
+        // Flatten the static layers into a single cached bitmap so the compositor
+        // stops re-drawing the background once it's on screen.
+        .drawingGroup()
         .allowsHitTesting(false)
-        .onAppear {
-            guard !reduceMotion else { return }
-            withAnimation(.easeInOut(duration: 9).repeatForever(autoreverses: true)) {
-                animate = true
-            }
-        }
     }
 
-    private func blob(_ color: Color, size: CGFloat) -> some View {
-        Circle()
-            .fill(color)
-            .frame(width: size, height: size)
-            .blur(radius: 120)
-            .opacity(0.16)
+    /// Soft circular glow: a radial gradient from the tinted color out to clear,
+    /// matching the falloff of the old blurred-circle blob at a fraction of the cost.
+    private func aurora(_ color: Color, size: CGFloat) -> some View {
+        RadialGradient(
+            colors: [color.opacity(0.18), color.opacity(0.05), .clear],
+            center: .center,
+            startRadius: 0,
+            endRadius: size / 2
+        )
+        .frame(width: size, height: size)
     }
 
     private let positions: [(x: CGFloat, y: CGFloat)] = [

@@ -122,11 +122,8 @@ struct HomeView: View {
 
 struct BrandWordmark: View {
     var body: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "sparkles").foregroundStyle(Theme.ink)
-            Text("e-z").font(.headline.weight(.bold)).foregroundStyle(Theme.ink)
-                + Text(".rsvp").font(.headline.weight(.bold)).foregroundStyle(Theme.ink)
-        }
+        Text("e-z").font(.headline.weight(.bold)).foregroundStyle(Theme.ink)
+            + Text(".rsvp").font(.headline.weight(.bold)).foregroundStyle(Theme.ink)
     }
 }
 
@@ -191,9 +188,7 @@ private struct HeadlineMysteryCard: View {
         Badge(text: "Revealed — you're going!", systemImage: "checkmark.seal.fill", tint: Theme.cyan)
             .frame(maxWidth: .infinity, alignment: .leading)
 
-        Image(systemName: event.imageSymbol)
-            .font(.system(size: 60)).foregroundStyle(Theme.brandSolid)
-            .padding(.top, 4)
+        EventHeroImage(event: event, height: 170, fallbackGlyphSize: 54)
 
         VStack(spacing: 6) {
             Text(event.title)
@@ -289,10 +284,15 @@ private struct UpcomingMysteryRow: View {
             RevealView(eventID: event.id)
         } label: {
             HStack(spacing: 14) {
-                Image(systemName: revealed ? event.imageSymbol : "questionmark.diamond.fill")
-                    .font(.title2).foregroundStyle(Theme.brandSolid)
-                    .frame(width: 52, height: 52)
-                    .glass(cornerRadius: Theme.Radius.sm)
+                if revealed {
+                    EventHeroImage(event: event, width: 52, height: 52,
+                                   cornerRadius: Theme.Radius.sm, fallbackGlyphSize: 22)
+                } else {
+                    Image(systemName: "questionmark.diamond.fill")
+                        .font(.title2).foregroundStyle(Theme.brandSolid)
+                        .frame(width: 52, height: 52)
+                        .glass(cornerRadius: Theme.Radius.sm)
+                }
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(revealed ? event.title : "Mystery RSVP")

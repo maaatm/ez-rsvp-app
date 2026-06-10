@@ -9,7 +9,6 @@ import SwiftUI
 /// to the reveal with muted meta along the bottom.
 struct EventCard: View {
     let event: MysteryEvent
-    var matchScore: Double? = nil
     var topReason: String? = nil
     /// Mystery mode — hides the category badge and glyph so the surprise holds.
     var hideCategory: Bool = false
@@ -18,14 +17,11 @@ struct EventCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            // Top row: category pill (hidden in mystery mode) + match pill.
-            HStack(alignment: .top) {
-                if !hideCategory {
+            // Top row: category pill (hidden in mystery mode to hold the surprise).
+            if !hideCategory {
+                HStack(alignment: .top) {
                     frostedPill(event.category.rawValue, systemImage: event.category.symbol)
-                }
-                Spacer(minLength: 8)
-                if let matchScore {
-                    frostedPill("\(Int(matchScore * 100))% match", systemImage: "sparkles")
+                    Spacer(minLength: 8)
                 }
             }
 

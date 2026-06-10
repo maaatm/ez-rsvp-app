@@ -161,9 +161,7 @@ private struct RevealedDetails: View {
             VStack(spacing: Theme.Space.lg) {
                 // Hero
                 VStack(spacing: 14) {
-                    Image(systemName: event.imageSymbol)
-                        .font(.system(size: 64)).foregroundStyle(Theme.brandSolid)
-                        .padding(.top, 8)
+                    EventHeroImage(event: event, height: 190)
                     Badge(text: "You said yes — here it is", systemImage: "sparkles", tint: Theme.cyan)
                     Text(event.title)
                         .font(.system(.largeTitle, design: .rounded).weight(.heavy))

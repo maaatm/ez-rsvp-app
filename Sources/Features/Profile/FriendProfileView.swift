@@ -119,7 +119,7 @@ struct FriendProfileView: View {
             } else {
                 ForEach(upcoming, id: \.event.id) { item in
                     HStack(spacing: 14) {
-                        MysteryBox(size: 48, glow: false)
+                        MysteryBox(size: 48, glow: false, animated: false)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Mystery").font(.subheadline.weight(.semibold))
                             Text("\(item.event.eventTime.formatted(style: .weekdayLong)) · \(item.crew.name)")

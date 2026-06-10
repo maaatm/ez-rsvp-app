@@ -32,7 +32,6 @@ struct EditProfileSheet: View {
                 .padding(.bottom, 40)
             }
             .scrollIndicators(.hidden)
-            .background(GradientBackground())
             .navigationTitle("Edit profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

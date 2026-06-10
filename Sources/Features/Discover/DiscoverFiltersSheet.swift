@@ -25,7 +25,6 @@ struct DiscoverFiltersSheet: View {
                 .padding(Theme.Space.lg)
             }
             .scrollDismissesKeyboard(.interactively)
-            .background(GradientBackground())
             .navigationTitle("Find events")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -89,9 +89,7 @@ struct RevealCeremony: View {
             // BACK — revealed
             faceContainer {
                 VStack(spacing: 14) {
-                    Image(systemName: event.imageSymbol)
-                        .font(.system(size: 64))
-                        .foregroundStyle(Theme.brandSolid)
+                    EventHeroImage(event: event, height: 150, fallbackGlyphSize: 60)
                     Text("YOU SAID YES TO").font(.caption2.weight(.bold)).tracking(2).foregroundStyle(Theme.violet)
                     Text(event.title)
                         .font(.system(.title, design: .rounded).weight(.heavy))

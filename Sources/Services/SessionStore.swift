@@ -424,6 +424,14 @@ final class SessionStore {
 
     // MARK: Other people's profiles
 
+    /// The freshest copy of a user. Crew/group data carries `AppUser` snapshots
+    /// baked in at seed time, so the current user's member row goes stale after
+    /// they edit their name, photo, or privacy in Settings. Resolve their id back
+    /// to the live `currentUser` so those edits show up everywhere they appear.
+    func liveUser(_ user: AppUser) -> AppUser {
+        user.id == currentUser?.id ? (currentUser ?? user) : user
+    }
+
     /// A given user's friends. For the current user this is the live, mutable
     /// friends list (so anyone they just added appears right away); for everyone
     /// else it's resolved from the demo friend graph.

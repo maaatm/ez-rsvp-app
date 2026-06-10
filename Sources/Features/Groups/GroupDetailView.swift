@@ -65,7 +65,7 @@ struct GroupDetailView: View {
                             .frame(width: 56, height: 56)
                             .glass(cornerRadius: Theme.Radius.sm)
                     } else {
-                        MysteryBox(size: 56, glow: false)
+                        MysteryBox(size: 56, glow: false, animated: false)
                     }
                     VStack(alignment: .leading, spacing: 4) {
                         if revealed {
@@ -93,7 +93,7 @@ struct GroupDetailView: View {
             .glass(cornerRadius: Theme.Radius.md)
         } else {
             VStack(spacing: 12) {
-                MysteryBox(size: 80)
+                MysteryBox(size: 80, animated: false)
                 Text("No mystery yet").font(.headline)
                 Text("Set your crew's guardrails and we'll match you to something you'll love.")
                     .font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.center)
@@ -189,18 +189,21 @@ struct GroupDetailView: View {
         VStack(alignment: .leading, spacing: 10) {
             SectionHeader(title: "Members")
             ForEach(group.members) { member in
+                // Resolve the current user's row to their live profile so edits
+                // made in Settings (name, photo, privacy) show here too.
+                let person = session.liveUser(member.user)
                 NavigationLink {
-                    FriendProfileView(user: member.user)
+                    FriendProfileView(user: person)
                 } label: {
                     HStack(spacing: 12) {
-                        AvatarView(user: member.user, size: 40)
+                        AvatarView(user: person, size: 40)
                         VStack(alignment: .leading, spacing: 1) {
                             HStack(spacing: 5) {
-                                Text(member.user.name).font(.subheadline.weight(.semibold))
-                                if member.user.id == group.ownerID {
+                                Text(person.name).font(.subheadline.weight(.semibold))
+                                if person.id == group.ownerID {
                                     Image(systemName: "crown.fill").font(.caption2).foregroundStyle(.yellow)
                                 }
-                                if member.user.isPrivateProfile {
+                                if person.isPrivateProfile {
                                     Image(systemName: "lock.fill").font(.caption2).foregroundStyle(.secondary)
                                 }
                             }

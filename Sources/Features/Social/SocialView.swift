@@ -220,7 +220,6 @@ private struct AddFriendSheet: View {
                 }
                 .padding(Theme.Space.lg)
             }
-            .background(GradientBackground())
             .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } } }
         }
         .presentationDetents([.large])

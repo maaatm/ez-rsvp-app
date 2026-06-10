@@ -75,11 +75,10 @@ struct DiscoverView: View {
 
     private func listRow(_ offer: ScoredEvent) -> some View {
         NavigationLink {
-            MysteryDetailView(event: offer.event, score: offer.score,
+            MysteryDetailView(event: offer.event,
                               reasons: offer.reasons, hideCategory: filters.mysteryMode)
         } label: {
             EventCard(event: offer.event,
-                      matchScore: offer.score,
                       topReason: offer.reasons.first,
                       hideCategory: filters.mysteryMode)
         }
@@ -152,7 +151,6 @@ struct DiscoverView: View {
 private struct MysteryDetailView: View {
     @Environment(SessionStore.self) private var session
     let event: MysteryEvent
-    let score: Double
     let reasons: [String]
     let hideCategory: Bool
 
@@ -173,7 +171,6 @@ private struct MysteryDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.Space.lg) {
                 EventCard(event: event,
-                          matchScore: claimed ? nil : score,
                           hideCategory: hideCategory)
 
                 HStack(spacing: 12) {
