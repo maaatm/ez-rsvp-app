@@ -1,4 +1,4 @@
-# 🎁 e-z.rsvp iOS app
+# e-z.rsvp iOS app
 Say yes now. Find out later. e-z.rsvp matches you and your friends with surprise adventures without decision fatigue. It's our job to find the events. All you have to do is show up.
 
 ## Inspiration
